@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Search as SearchIcon } from 'lucide-react';
 import { SearchResults, Song } from '../types';
 import { songs } from '../data/songs';
+import { MESSAGES } from '../constants';
 
 interface SearchProps {
   onPlaySong: (song: Song) => void;
+  songsList: Song[];
 }
 
 const mockSearchResults: SearchResults = {
@@ -23,7 +25,7 @@ const mockSearchResults: SearchResults = {
   }))
 };
 
-const Search: React.FC<SearchProps> = ({ onPlaySong }) => {
+const Search: React.FC<SearchProps> = ({ onPlaySong, songsList }) => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResults | null>(null);
 
@@ -44,7 +46,7 @@ const Search: React.FC<SearchProps> = ({ onPlaySong }) => {
           type="text"
           value={query}
           onChange={handleSearch}
-          placeholder="What do you want to listen to?"
+          placeholder={MESSAGES.SEARCH_PLACEHOLDER}
           className="w-full pl-12 pr-4 py-3 bg-zinc-800 rounded-full text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-white"
         />
       </div>

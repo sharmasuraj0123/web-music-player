@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Define your color variables */
+:root {
+  --color-bg-primary: #1a1a1a;         /* Replace with your desired colors */
+  --color-border: #1c2215;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #999999;
+  --color-accent: #22c55e;             /* For example, a green accent color */
+  --color-gradient-from: #050101;
+  --color-gradient-to: #000000;
+  /* Add more color variables as needed */
+}

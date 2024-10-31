@@ -1,32 +1,89 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Heart, Clock3, Menu } from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import MusicPlayer from './components/MusicPlayer';
 import Search from './components/Search';
 import Library from './components/Library';
+import AddSong from './components/AddSong';
 import { Song } from './types';
-import { albums, songs } from './data/songs';
+import { albums, songs as initialSongs } from './data/songs';
+import { shuffleArray } from './utils';
+import { MESSAGES } from './constants';
 
 function App() {
-  const [currentView, setCurrentView] = useState<'home' | 'search' | 'library'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'search' | 'library' | 'addSong'>('home');
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentSong, setCurrentSong] = useState<Song>(songs[0]);
+  const [songs, setSongs] = useState<Song[]>(initialSongs);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const handlePlaySong = (song: Song) => {
-    setCurrentSong(song);
+  const [isShuffle, setIsShuffle] = useState(false);
+  const [playbackQueue, setPlaybackQueue] = useState<Song[]>(songs);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentSong, setCurrentSong] = useState<Song>(playbackQueue[0]);
+
+  useEffect(() => {
+    setCurrentSong(playbackQueue[currentIndex]);
+  }, [currentIndex, playbackQueue]);
+
+  useEffect(() => {
+    let newQueue: Song[];
+    if (isShuffle) {
+      newQueue = shuffleArray(songs);
+    } else {
+      newQueue = [...songs];
+    }
+    setPlaybackQueue(newQueue);
+
+    const index = newQueue.findIndex((song) => song.id === currentSong.id);
+    if (index !== -1) {
+      setCurrentIndex(index);
+    } else {
+      setCurrentIndex(0);
+    }
+  }, [isShuffle, songs]);
+
+  const handleNextSong = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % playbackQueue.length);
     setIsPlaying(true);
+  };
+
+  const handlePrevSong = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? playbackQueue.length - 1 : prevIndex - 1
+    );
+    setIsPlaying(true);
+  };
+
+  const handlePlaySong = (song: Song) => {
+    const index = playbackQueue.findIndex((s) => s.id === song.id);
+    if (index !== -1) {
+      setCurrentIndex(index);
+    } else {
+      const newQueue = [...playbackQueue];
+      newQueue.splice(currentIndex + 1, 0, song);
+      setPlaybackQueue(newQueue);
+      setCurrentIndex(currentIndex + 1);
+    }
+    setIsPlaying(true);
+  };
+
+  const handleAddSong = (newSong: Song) => {
+    const updatedSongs = [...songs, newSong];
+    setSongs(updatedSongs);
+    setCurrentView('library');
   };
 
   const renderMainContent = () => {
     switch (currentView) {
       case 'search':
-        return <Search onPlaySong={handlePlaySong} />;
+        return <Search onPlaySong={handlePlaySong} songsList={songs} />;
       case 'library':
-        return <Library />;
+        return <Library songsList={songs} onPlaySong={handlePlaySong} />;
+      case 'addSong':
+        return <AddSong onAddSong={handleAddSong} />;
       default:
         return (
-          <main className="flex-1 overflow-y-auto bg-gradient-to-b from-zinc-900 to-black p-4 md:p-8">
+          <main className="flex-1 overflow-y-auto bg-gradient-to-b p-4 md:p-8">
             <div className="flex items-center justify-between mb-6 md:mb-8">
               <div className="flex items-center gap-2">
                 <button 
@@ -35,7 +92,9 @@ function App() {
                 >
                   <Menu className="w-6 h-6" />
                 </button>
-                <h1 className="text-2xl md:text-3xl font-bold">Good evening</h1>
+                <h1 className="text-2xl md:text-3xl font-bold">
+                  {MESSAGES.GOOD_EVENING}
+                </h1>
               </div>
               <button className="hover:scale-105 transition-transform">
                 <Heart className="w-5 h-5 md:w-6 md:h-6" />
@@ -61,7 +120,9 @@ function App() {
               ))}
             </div>
 
-            <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Recently Played</h2>
+            <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">
+              {MESSAGES.RECENTLY_PLAYED}
+            </h2>
             <div className="bg-zinc-900/90 rounded-lg overflow-hidden">
               <div className="px-4 md:px-6 py-3 md:py-4 flex items-center text-sm text-zinc-400 border-b border-zinc-800">
                 <span className="w-8">#</span>
@@ -109,11 +170,17 @@ function App() {
         {renderMainContent()}
       </div>
 
-      <MusicPlayer
-        isPlaying={isPlaying}
-        setIsPlaying={setIsPlaying}
-        currentSong={currentSong}
-      />
+      {currentView !== 'addSong' && (
+        <MusicPlayer
+          isPlaying={isPlaying}
+          setIsPlaying={setIsPlaying}
+          currentSong={currentSong}
+          onNextSong={handleNextSong}
+          onPrevSong={handlePrevSong}
+          isShuffle={isShuffle}
+          setIsShuffle={setIsShuffle}
+        />
+      )}
     </div>
   );
 }

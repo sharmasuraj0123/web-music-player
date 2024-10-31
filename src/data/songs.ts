@@ -53,7 +53,8 @@ export const songs: Song[] = [
     album: 'Midnight Memories',
     albumId: 'a1',
     duration: '3:45',
-    cover: albums[0].cover
+    cover: albums[0].cover,
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'
   },
   {
     id: 's2',
@@ -62,7 +63,8 @@ export const songs: Song[] = [
     album: 'Ocean Waves',
     albumId: 'a2',
     duration: '4:12',
-    cover: albums[1].cover
+    cover: albums[1].cover,
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'
   },
   {
     id: 's3',
@@ -71,7 +73,8 @@ export const songs: Song[] = [
     album: 'Urban Jungle',
     albumId: 'a3',
     duration: '3:56',
-    cover: albums[2].cover
+    cover: albums[2].cover,
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3'
   },
   {
     id: 's4',
@@ -80,7 +83,8 @@ export const songs: Song[] = [
     album: 'Desert Wind',
     albumId: 'a4',
     duration: '4:30',
-    cover: albums[3].cover
+    cover: albums[3].cover,
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3'
   },
   {
     id: 's5',
@@ -89,7 +93,8 @@ export const songs: Song[] = [
     album: 'Mountain Echo',
     albumId: 'a5',
     duration: '3:22',
-    cover: albums[4].cover
+    cover: albums[4].cover,
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3'
   },
   {
     id: 's6',
@@ -98,6 +103,7 @@ export const songs: Song[] = [
     album: 'Forest Tales',
     albumId: 'a6',
     duration: '4:15',
-    cover: albums[5].cover
+    cover: albums[5].cover,
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3'
   }
 ];

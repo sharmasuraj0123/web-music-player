@@ -1,9 +1,10 @@
 import React from 'react';
 import { Home, Search, Library, PlusSquare, Heart, Music2, X } from 'lucide-react';
+import { APP_TITLE, NAVIGATION_LABELS } from '../constants';
 
 interface SidebarProps {
-  currentView: 'home' | 'search' | 'library';
-  onViewChange: (view: 'home' | 'search' | 'library') => void;
+  currentView: 'home' | 'search' | 'library' | 'addSong';
+  onViewChange: (view: 'home' | 'search' | 'library' | 'addSong') => void;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -21,7 +22,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, isOpen, on
       
       {/* Sidebar */}
       <aside className={`
-        fixed md:static inset-y-0 left-0 w-64 bg-black p-6 
+        fixed md:static inset-y-0 left-0 w-64 bg-bg-primary p-6 
         transition-transform duration-300 ease-in-out z-50
         ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
         md:translate-x-0
@@ -29,11 +30,11 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, isOpen, on
         <div className="flex items-center justify-between gap-2 mb-8">
           <div className="flex items-center gap-2">
             <Music2 className="w-8 h-8" />
-            <span className="text-xl font-bold">Spotify Clone</span>
+            <span className="text-xl font-bold">{APP_TITLE}</span>
           </div>
           <button 
             onClick={onClose}
-            className="p-1 hover:bg-zinc-800 rounded-full md:hidden"
+            className="p-1 hover:bg-border rounded-full md:hidden"
           >
             <X className="w-6 h-6" />
           </button>
@@ -47,11 +48,11 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, isOpen, on
                 onClose();
               }}
               className={`flex items-center gap-3 text-sm font-semibold w-full text-left ${
-                currentView === 'home' ? 'text-white' : 'text-zinc-400 hover:text-white'
+                currentView === 'home' ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'
               } transition-colors`}
             >
               <Home className="w-6 h-6" />
-              Home
+              {NAVIGATION_LABELS.HOME}
             </button>
             <button
               onClick={() => {
@@ -59,11 +60,11 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, isOpen, on
                 onClose();
               }}
               className={`flex items-center gap-3 text-sm font-semibold w-full text-left ${
-                currentView === 'search' ? 'text-white' : 'text-zinc-400 hover:text-white'
+                currentView === 'search' ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'
               } transition-colors`}
             >
               <Search className="w-6 h-6" />
-              Search
+              {NAVIGATION_LABELS.SEARCH}
             </button>
             <button
               onClick={() => {
@@ -71,31 +72,24 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, isOpen, on
                 onClose();
               }}
               className={`flex items-center gap-3 text-sm font-semibold w-full text-left ${
-                currentView === 'library' ? 'text-white' : 'text-zinc-400 hover:text-white'
+                currentView === 'library' ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'
               } transition-colors`}
             >
               <Library className="w-6 h-6" />
-              Your Library
+              {NAVIGATION_LABELS.LIBRARY}
             </button>
-          </div>
-
-          <div className="space-y-3">
-            <button className="flex items-center gap-3 text-sm font-semibold text-zinc-400 hover:text-white transition-colors w-full text-left">
+            <button
+              onClick={() => {
+                onViewChange('addSong');
+                onClose();
+              }}
+              className={`flex items-center gap-3 text-sm font-semibold w-full text-left ${
+                currentView === 'addSong' ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'
+              } transition-colors`}
+            >
               <PlusSquare className="w-6 h-6" />
-              Create Playlist
+              {NAVIGATION_LABELS.ADD_SONG}
             </button>
-            <button className="flex items-center gap-3 text-sm font-semibold text-zinc-400 hover:text-white transition-colors w-full text-left">
-              <Heart className="w-6 h-6" />
-              Liked Songs
-            </button>
-          </div>
-
-          <div className="pt-6 border-t border-zinc-800 space-y-3 text-sm text-zinc-400">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <button key={i} className="block hover:text-white transition-colors w-full text-left truncate">
-                My Playlist #{i + 1}
-              </button>
-            ))}
           </div>
         </nav>
       </aside>

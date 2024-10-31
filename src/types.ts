@@ -6,6 +6,7 @@ export interface Song {
   albumId: string;
   duration: string;
   cover: string;
+  audioUrl: string;
 }
 
 export interface Album {
